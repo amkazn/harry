@@ -72,24 +72,24 @@ public class TelegramBot extends TelegramLongPollingBot {
 	private void processUpdate(Update update) {
 		
 		String messageText = update.getMessage().getText();
-		String s= "";
+		String commandName= "";
 		
 		if (messageText.contains("/")) {
 			for (char ch : messageText.toCharArray()) {
-				s = ch == '/'? (s) : (s.concat(String.valueOf(ch)));
+				commandName = ch == '/'? (commandName) : (commandName.concat(String.valueOf(ch)));
 			}			
-		} else s = "DEFAULT";
+		} else commandName = "DEFAULT";
 		
-		s=s.toUpperCase();
+		commandName = commandName.toUpperCase();
 		
 		try {
 			
-			context.getBean("get" + s + "Command", BotCommandHandler.class).handleUpdate(this, update);
-			log.info("Command " + s + " from user: " + update.getMessage().getFrom().getUserName());
+			context.getBean("get" + commandName + "Command", BotCommandHandler.class).handleUpdate(this, update);
+			log.info("Command " + commandName + " from user: " + update.getMessage().getFrom().getUserName());
 			
 		} catch (NoSuchBeanDefinitionException e) {
 			
-			log.error("Unsupported command " + s + " from user: " + update.getMessage().getFrom().getUserName());
+			log.error("Unsupported command " + commandName + " from user: " + update.getMessage().getFrom().getUserName());
 
 		}
 	}
